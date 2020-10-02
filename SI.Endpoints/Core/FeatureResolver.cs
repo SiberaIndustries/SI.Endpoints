@@ -8,7 +8,7 @@ namespace SI.Endpoints.Core
         public static bool TryResolve(TypeInfo value, out string feature)
         {
             feature = value.Namespace.Split('.').LastOrDefault();
-            return !string.IsNullOrEmpty(feature);
+            return feature != null;
         }
     }
 }

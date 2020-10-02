@@ -7,9 +7,9 @@
     <Version>0.1.0</Version>
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
   </PropertyGroup>
-
+  
   <PropertyGroup Label="Package">
-    <PackageId>SI.Endpoints</PackageId>
+    <PackageId>SI.Endpoints.Swagger</PackageId>
     <Authors>Tobias Sibera</Authors>
     <Company>Sibera Industries</Company>
     <Description></Description>
@@ -19,7 +19,7 @@
     <PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>Endpoints;MVC;Controller</PackageTags>
+    <PackageTags>Swashbuckle;Swagger;Annotations</PackageTags>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -33,13 +33,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" PrivateAssets="All" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.205" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" Visible="false" />
+    <ProjectReference Include="..\SI.Endpoints\SI.Endpoints.csproj" />
   </ItemGroup>
 
 </Project>
