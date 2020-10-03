@@ -41,22 +41,20 @@ jobs:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
       
-      - name: Cache NuGet-Packages
-        id: cache-nuget-packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          #restore-keys: |
-          #  ${{ runner.os }}-nuget-
+#      - name: Cache NuGet-Packages
+#        id: cache-nuget-packages
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.nuget/packages
+#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
 
       - name: Restore Packages
-        if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
+#        if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
         env:
           DOTNET_CLI_TELEMETRY_OPTOUT: 1
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
           NUGET_XMLDOC_MODE: skip
-        run: dotnet restore --use-lock-file #--nologo
+        run: dotnet restore
         
       - name: Build
         env:
