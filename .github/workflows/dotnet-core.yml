@@ -34,8 +34,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: .\.tools
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
+          key: ${{ runner.os }}-dotnet-tools
+          restore-keys: ${{ runner.os }}-dotnet-tools
       
       - name: Install dotnet tools
         if: steps.cache-dotnet-tools.outputs.cache-hit != 'true'
@@ -51,9 +51,6 @@ jobs:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      
-      - name: Build
-        run: dotnet build -c release --no-restore
         
       - name: Check CVEs
         shell: powershell
@@ -75,7 +72,7 @@ jobs:
           .\.tools\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Create NuGet package
-        run: dotnet pack -c release
+        run: dotnet pack -c release --no-restore
     
       - name: Upload NuGet-Package
         uses: actions/upload-artifact@v2
