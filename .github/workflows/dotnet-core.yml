@@ -31,12 +31,6 @@ jobs:
           New-Item -Path .\.tools -ItemType Directory -Force
           dotnet tool update dotnet-retire --tool-path .\.tools
           dotnet tool update dotnet-sonarscanner --tool-path .\.tools
-        
-      - name: Check CVEs
-        shell: powershell
-        run: |
-          .\.tools\dotnet-retire -p SI.Endpoints
-          .\.tools\dotnet-retire -p SI.Endpoints.Swagger
       
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
@@ -66,6 +60,12 @@ jobs:
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
           NUGET_XMLDOC_MODE: skip
         run: dotnet build -c release --no-restore
+        
+      - name: Check CVEs
+        shell: powershell
+        run: |
+          .\.tools\dotnet-retire -p SI.Endpoints
+          .\.tools\dotnet-retire -p SI.Endpoints.Swagger
       
       - name: Test and analyze
         env:
