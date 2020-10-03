@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
@@ -7,6 +8,14 @@ namespace SI.Endpoints.Sample
 {
     public class Startup
     {
+        private readonly IConfiguration Configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -15,7 +24,7 @@ namespace SI.Endpoints.Sample
             services.AddSwaggerGen(options =>
             {
                 options.EnableAnnotations();
-                options.EnableFeatureFilter();
+                options.EnableFeatureFilter(Configuration.GetValue("FeatureFilter", false));
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Sample endpoints", Version = "v1" });
             });
         }

@@ -1,6 +1,8 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SI.Endpoints.Core;
 using SI.Endpoints.Sample;
 using SI.Endpoints.Sample.Endpoints.TodoItem;
@@ -45,6 +47,7 @@ namespace SI.Endpoints.Tests
 
             // Act
             var response = await client.GetAsync(expectedUri + id);
+            response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var responseContent = JsonConvert.DeserializeObject<GetTodoItemResponse>(content);
 
@@ -65,6 +68,50 @@ namespace SI.Endpoints.Tests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task GetSwaggerDocWithFeatureFilterEnabled()
+        {
+            // Arrange
+            using var client = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddCommandLine(new[] { "FeatureFilter=true" });
+            })).CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/swagger/v1/swagger.json");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = JsonConvert.DeserializeObject<JObject>(content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            responseContent.SelectToken("info.title").Should().NotBeNull();
+            responseContent.SelectToken("paths./TodoItem/Create.post.tags")?.ToObject<string[]>()
+                .Should().NotBeNull().And.BeEquivalentTo("TodoItem");
+        }
+
+        [Fact]
+        public async Task GetSwaggerDocWithFeatureFilterDisabled()
+        {
+            // Arrange
+            using var client = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddCommandLine(new[] { "FeatureFilter=false" });
+            })).CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/swagger/v1/swagger.json");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = JsonConvert.DeserializeObject<JObject>(content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            responseContent.SelectToken("info.title").Should().NotBeNull();
+            responseContent.SelectToken("paths./TodoItem/Create.post.tags")?.ToObject<string[]>()
+                .Should().NotBeNull().And.BeEquivalentTo("TodoItem", "Create");
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SI.Endpoints.Sample.Endpoints.TodoItem
 {
-    public class List : EndpointWithResponse<IEnumerable<TodoItemResponse>>
+    public class ListEndpoint : EndpointWithResponse<IEnumerable<TodoItemResponse>>
     {
         [HttpGet]
         public override ActionResult<IEnumerable<TodoItemResponse>> Handle()
