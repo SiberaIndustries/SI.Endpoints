@@ -12,14 +12,14 @@
     <PackageId>SI.Endpoints.Swagger</PackageId>
     <Authors>Tobias Sibera</Authors>
     <Company>Sibera Industries</Company>
-    <Description></Description>
+    <Description>Simple ASP.NET Core API Endpoints - Swagger integration for SI.Endpoints.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/SiberaIndustries/SI.Endpoints</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>Swashbuckle;Swagger;Annotations</PackageTags>
+    <PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller;Swashbuckle;Swagger;Annotations</PackageTags>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -38,6 +38,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SI.Endpoints\SI.Endpoints.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png" Link="icon.png" Visible="false" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

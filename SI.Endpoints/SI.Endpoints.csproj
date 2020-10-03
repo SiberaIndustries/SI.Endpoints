@@ -42,4 +42,8 @@
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" Visible="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\icon.png" Link="icon.png" Visible="false" Pack="true" PackagePath="" />
+  </ItemGroup>
+
 </Project>

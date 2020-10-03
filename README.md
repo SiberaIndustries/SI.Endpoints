@@ -24,7 +24,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-## 3. Create your first Endpoint and have fun
+### 3. Create your first Endpoint and have fun
 
 ```cs
 // Models
