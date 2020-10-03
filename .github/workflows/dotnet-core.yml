@@ -22,11 +22,13 @@ jobs:
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
 
       - name: Restore Packages
         if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
         run: dotnet restore --use-lock-file
       
       - name: Cache dotnet tools
@@ -59,10 +61,17 @@ jobs:
           .\.tools\dotnet-retire -p SI.Endpoints.Swagger
         
       - name: Build
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
         run: dotnet build -c release --no-restore
       
       - name: Test and analyze
         env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
@@ -76,7 +85,7 @@ jobs:
 
       - name: Create NuGet package
         run: dotnet pack -c release --no-restore
-    
+
       - name: Upload NuGet-Package
         uses: actions/upload-artifact@v2
         with:
