@@ -7,19 +7,56 @@ on:
     branches: [ master ]
 
 jobs:
+  
   build:
-
-    runs-on: ubuntu-latest
-
+    name: Build
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.402
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      
+      - name: Install dotnet-retire
+        shell: powershell
+        run: |
+          New-Item -Path .\.retirenet -ItemType Directory
+          dotnet tool update dotnet-retire --tool-path .\.retirenet
+          
+      - name: Check CVEs
+        shell: powershell
+        run: .\.retirenet\dotnet-retire -p SI.Endpoints
+      
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          $file = "Extensions.Dictionary\bin\Release\netstandard2.0\Extensions.Dictionary.dll"
+          $version = (Get-Command ([System.IO.Path]::Combine($pwd.Path, $file))).Version.ToString(3)
+          
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet test -c release --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
