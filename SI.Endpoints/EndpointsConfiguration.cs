@@ -14,15 +14,15 @@
             return this;
         }
 
-        public EndpointsConfiguration UseFeatures()
+        public EndpointsConfiguration UseFeatures(bool useFeatures = true)
         {
-            FeaturesUsed = true;
+            FeaturesUsed = useFeatures;
             return this;
         }
 
-        public EndpointsConfiguration IgnoreEndpointNames()
+        public EndpointsConfiguration IgnoreEndpointNames(bool ignoreEndpointNames = true)
         {
-            EndpointNamesIgnored = true;
+            EndpointNamesIgnored = ignoreEndpointNames;
             return this;
         }
     }

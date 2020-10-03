@@ -45,5 +45,11 @@
   <ItemGroup>
     <None Include="..\icon.png" Link="icon.png" Visible="false" Pack="true" PackagePath="" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>SI.Endpoints.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>
