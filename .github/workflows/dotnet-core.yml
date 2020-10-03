@@ -48,20 +48,20 @@ jobs:
 #          path: ~/.nuget/packages
 #          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
 
-      - name: Restore Packages
+#      - name: Restore Packages
 #        if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
-        env:
-          DOTNET_CLI_TELEMETRY_OPTOUT: 1
-          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-          NUGET_XMLDOC_MODE: skip
-        run: dotnet restore
+#        env:
+#          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+#          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+#          NUGET_XMLDOC_MODE: skip
+#        run: dotnet restore
         
       - name: Build
         env:
           DOTNET_CLI_TELEMETRY_OPTOUT: 1
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
           NUGET_XMLDOC_MODE: skip
-        run: dotnet build -c release --no-restore --nologo
+        run: dotnet build -c release --nologo
         
       - name: Check CVEs
         shell: powershell
@@ -90,7 +90,7 @@ jobs:
           DOTNET_CLI_TELEMETRY_OPTOUT: 1
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
           NUGET_XMLDOC_MODE: skip
-        run: dotnet pack -c release --no-restore --nologo
+        run: dotnet pack -c release --no-restore --no-build --nologo
 
       - name: Upload NuGet-Package
         uses: actions/upload-artifact@v2
