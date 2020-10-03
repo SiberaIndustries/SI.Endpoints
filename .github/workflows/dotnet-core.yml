@@ -16,43 +16,64 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       
-      - name: Install dotnet-retire
+      - name: Cache dotnet tools
+        id: cache-dotnet-tools
+        uses: actions/cache@v2
+        with:
+          path: .\.tools
+          key: ${{ runner.os }}-dotnet-tools
+      
+      - name: Install dotnet tools
+        if: steps.cache-dotnet-tools.outputs.cache-hit != 'true'
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
         shell: powershell
         run: |
-          New-Item -Path .\.retirenet -ItemType Directory
-          dotnet tool update dotnet-retire --tool-path .\.retirenet
+          New-Item -Path .\.tools -ItemType Directory -Force
+          dotnet tool update dotnet-retire --tool-path .\.tools
+          dotnet tool update dotnet-sonarscanner --tool-path .\.tools
       
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
       
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      
+#      - name: Cache NuGet-Packages
+#        id: cache-nuget-packages
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.nuget/packages
+#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+
+#      - name: Restore Packages
+#        if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
+#        env:
+#          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+#          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+#          NUGET_XMLDOC_MODE: skip
+#        run: dotnet restore
+        
       - name: Build
-        run: dotnet build -c release
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
+        run: dotnet build -c release --nologo
         
       - name: Check CVEs
         shell: powershell
-        run: .\.retirenet\dotnet-retire -p SI.Endpoints
-        
+        run: |
+          .\.tools\dotnet-retire -p SI.Endpoints
+          .\.tools\dotnet-retire -p SI.Endpoints.Swagger
+      
       - name: Test and analyze
         env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
@@ -60,16 +81,19 @@ jobs:
           $file = "SI.Endpoints\bin\Release\netstandard2.0\SI.Endpoints.dll"
           $version = (Get-Command ([System.IO.Path]::Combine($pwd.Path, $file))).Version.ToString(3)
           
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet test -c release --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.tools\dotnet-sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet test -c release --no-restore --nologo /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+          .\.tools\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Create NuGet package
-        run: dotnet pack -c release
-    
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
+        run: dotnet pack -c release --no-restore --no-build --nologo
+
       - name: Upload NuGet-Package
         uses: actions/upload-artifact@v2
         with:
           name: NuGet-Packages
           path: ./**/*.nupkg
-          
