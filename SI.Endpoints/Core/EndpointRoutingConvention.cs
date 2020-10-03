@@ -56,24 +56,29 @@ namespace SI.Endpoints.Core
                 }
                 else
                 {
-                    var controllerName = controller.ControllerName;
-                    var endsWithEndpoint = controllerName.EndsWith(Endpoint, StringComparison.OrdinalIgnoreCase);
-                    if (endsWithEndpoint)
-                    {
-                        var newControllerName = controller.ControllerName.Substring(0, controller.ControllerName.Length - Endpoint.Length);
-                        if (!string.IsNullOrEmpty(newControllerName))
-                        {
-                            controllerName = newControllerName;
-                        }
-                    }
-
-                    routeBuilder.Replace(EndpointBase.EndpointRouteToken, controllerName);
+                    routeBuilder.Replace(EndpointBase.EndpointRouteToken, GetControllerName(controller));
                 }
 
                 // set route and clear builder
                 controller.Selectors[0].AttributeRouteModel.Template = routeBuilder.ToString();
                 routeBuilder.Clear();
             }
+        }
+
+        private static string GetControllerName(ControllerModel controller)
+        {
+            var controllerName = controller.ControllerName;
+            var endsWithEndpoint = controllerName.EndsWith(Endpoint, StringComparison.OrdinalIgnoreCase);
+            if (endsWithEndpoint)
+            {
+                var newControllerName = controller.ControllerName.Substring(0, controller.ControllerName.Length - Endpoint.Length);
+                if (!string.IsNullOrEmpty(newControllerName))
+                {
+                    controllerName = newControllerName;
+                }
+            }
+
+            return controllerName;
         }
     }
 }
