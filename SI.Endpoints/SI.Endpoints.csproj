@@ -12,14 +12,14 @@
     <PackageId>SI.Endpoints</PackageId>
     <Authors>Tobias Sibera</Authors>
     <Company>Sibera Industries</Company>
-    <Description></Description>
+    <Description>Simple ASP.NET Core API Endpoints - The alternative to Controllers and Mediator patterns.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/SiberaIndustries/SI.Endpoints</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>Endpoints;MVC;Controller</PackageTags>
+    <PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller</PackageTags>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
