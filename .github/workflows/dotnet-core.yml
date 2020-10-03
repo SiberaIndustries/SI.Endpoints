@@ -58,6 +58,9 @@ jobs:
           .\.tools\dotnet-retire -p SI.Endpoints
           .\.tools\dotnet-retire -p SI.Endpoints.Swagger
         
+      - name: Build
+        run: dotnet build -c release --no-restore
+      
       - name: Test and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
