@@ -25,6 +25,10 @@ jobs:
       
       - name: Install dotnet tools
         if: steps.cache-dotnet-tools.outputs.cache-hit != 'true'
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: 1
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_XMLDOC_MODE: skip
         shell: powershell
         run: |
           New-Item -Path .\.tools -ItemType Directory -Force
@@ -43,8 +47,8 @@ jobs:
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          #restore-keys: |
+          #  ${{ runner.os }}-nuget-
 
       - name: Restore Packages
         if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
