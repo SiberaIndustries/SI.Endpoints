@@ -57,7 +57,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          $file = "Extensions.Dictionary\bin\Release\netstandard2.0\Extensions.Dictionary.dll"
+          $file = "SI.Endpoints\bin\Release\netstandard2.0\SI.Endpoints.dll"
           $version = (Get-Command ([System.IO.Path]::Combine($pwd.Path, $file))).Version.ToString(3)
           
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
@@ -66,3 +66,10 @@ jobs:
 
       - name: Create NuGet package
         run: dotnet pack -c release
+    
+      - name: Upload NuGet-Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: NuGet-Packages
+          path: ./**/*.nupkg
+          
