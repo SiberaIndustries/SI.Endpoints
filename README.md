@@ -1,5 +1,10 @@
 # SI.Endpoints
 
+[![NuGet](https://img.shields.io/nuget/v/SI.Endpoints.svg)](https://www.nuget.org/packages/SI.Endpoints)
+[![NuGet](https://img.shields.io/nuget/v/SI.Endpoints.Swagger.svg)](https://www.nuget.org/packages/SI.Endpoints.Swagger)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SiberaIndustries_SI.Endpoints&metric=alert_status)](https://sonarcloud.io/dashboard?id=SiberaIndustries_SI.Endpoints)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SiberaIndustries_SI.Endpoints&metric=coverage)](https://sonarcloud.io/dashboard?id=SiberaIndustries_SI.Endpoints)
+
 ## Introduction
 
 TODO
