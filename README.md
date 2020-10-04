@@ -11,7 +11,7 @@ TODO
 
 ## Getting Started
 
-### 1. Install and reference the Nuget SimpleEndpoints
+### 1. Install and reference the NuGet package
 
 ```
 Install-Package SI.Endpoints
