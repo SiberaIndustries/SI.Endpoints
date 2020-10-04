@@ -13,11 +13,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - uses: actions/setup-java@v1
         with:
           java-version: '15'
           java-package: jre
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       
       - name: Cache dotnet tools
         id: cache-dotnet-tools
