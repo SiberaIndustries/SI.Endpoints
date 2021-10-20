@@ -15,7 +15,6 @@ namespace SI.Endpoints.Sample
             Configuration = configuration;
         }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
