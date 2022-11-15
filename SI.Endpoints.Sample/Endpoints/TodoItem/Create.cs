@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace SI.Endpoints.Sample.Endpoints.TodoItem
 {

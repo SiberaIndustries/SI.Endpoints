@@ -6,18 +6,16 @@ using Newtonsoft.Json.Linq;
 using SI.Endpoints.Core;
 using SI.Endpoints.Sample;
 using SI.Endpoints.Sample.Endpoints.TodoItem;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace SI.Endpoints.Tests
 {
-    public class EndpointTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class EndpointTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Startup> factory;
+        private readonly WebApplicationFactory<Program> factory;
 
-        public EndpointTests(WebApplicationFactory<Startup> factory)
+        public EndpointTests(WebApplicationFactory<Program> factory)
         {
             this.factory = factory;
         }
