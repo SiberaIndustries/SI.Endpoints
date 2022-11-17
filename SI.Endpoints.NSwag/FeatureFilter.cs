@@ -4,7 +4,7 @@ using SI.Endpoints.Core;
 using System.Linq;
 using System.Reflection;
 
-namespace SI.Endpoints.NSwag
+namespace SI.Endpoints
 {
     public class FeatureFilter : IOperationProcessor
     {

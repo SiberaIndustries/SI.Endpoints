@@ -1,6 +1,6 @@
 ﻿using NSwag.Generation.AspNetCore;
 
-namespace SI.Endpoints.NSwag
+namespace SI.Endpoints
 {
     public static class AspNetCoreOpenApiDocumentGeneratorSettingsExtensions
     {
