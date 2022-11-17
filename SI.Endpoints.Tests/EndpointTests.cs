@@ -59,12 +59,14 @@ namespace SI.Endpoints.Tests
             responseContent.Id.Should().Be(42);
         }
 
-        [Fact]
-        public async Task GetResponseShouldBeNotFoundWhenIdNotExists()
+        [Theory]
+        [InlineData("")]
+        [InlineData("nswag")]
+        public async Task GetResponseShouldBeNotFoundWhenIdNotExists(string mode)
         {
             // Arrange
             var id = 43;
-            using var client = CreateCustomClient();
+            using var client = CreateCustomClient(mode: mode);
 
             // Act
             var response = await client.GetAsync($"/TodoItem/Get/" + id);
@@ -73,11 +75,13 @@ namespace SI.Endpoints.Tests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        [Fact]
-        public async Task GetSwaggerDocWithFeatureFilterEnabled()
+        [Theory]
+        [InlineData("")]
+        [InlineData("nswag")]
+        public async Task GetSwaggerDocWithFeatureFilterEnabled(string mode)
         {
             // Arrange
-            using var client = CreateCustomClient(replaceTags: true);
+            using var client = CreateCustomClient(mode: mode, replaceTags: true);
 
             // Act
             var response = await client.GetAsync("/swagger/v1/swagger.json");
@@ -92,11 +96,13 @@ namespace SI.Endpoints.Tests
                 .Should().NotBeNull().And.BeEquivalentTo("TodoItem");
         }
 
-        [Fact]
-        public async Task GetSwaggerDocWithFeatureFilterDisabled()
+        [Theory]
+        [InlineData("")]
+        [InlineData("nswag")]
+        public async Task GetSwaggerDocWithFeatureFilterDisabled(string mode)
         {
             // Arrange
-            using var client = CreateCustomClient(replaceTags: false);
+            using var client = CreateCustomClient(mode: mode, replaceTags: false);
 
             // Act
             var response = await client.GetAsync("/swagger/v1/swagger.json");
@@ -111,11 +117,13 @@ namespace SI.Endpoints.Tests
                 .Should().NotBeNull().And.BeEquivalentTo("TodoItem", "Create");
         }
 
-        [Fact]
-        public async Task ListResponseShouldBeSuccessful()
+        [Theory]
+        [InlineData("")]
+        [InlineData("nswag")]
+        public async Task ListResponseShouldBeSuccessful(string mode)
         {
             // Arrange
-            using var client = CreateCustomClient();
+            using var client = CreateCustomClient(mode: mode);
 
             // Act
             var response = await client.GetAsync($"/TodoItem/List/", HttpCompletionOption.ResponseHeadersRead);
