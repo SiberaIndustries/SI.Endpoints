@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SI.Endpoints.Sample
+﻿namespace SI.Endpoints.Sample
 {
     public class WeatherForecast
     {

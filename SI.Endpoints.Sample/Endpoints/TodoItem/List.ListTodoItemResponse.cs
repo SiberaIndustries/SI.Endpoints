@@ -1,6 +1,6 @@
 ﻿namespace SI.Endpoints.Sample.Endpoints.TodoItem
 {
-    public class TodoItemResponse
+    public class ListTodoItemResponse
     {
         public int Id { get; set; }
 

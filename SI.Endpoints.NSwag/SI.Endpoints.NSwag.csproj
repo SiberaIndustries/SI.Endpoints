@@ -9,17 +9,17 @@
   </PropertyGroup>
   
   <PropertyGroup Label="Package">
-    <PackageId>SI.Endpoints.Swagger</PackageId>
+    <PackageId>SI.Endpoints.NSwag</PackageId>
     <Authors>Tobias Sibera</Authors>
     <Company>Sibera Industries</Company>
-    <Description>Simple ASP.NET Core API Endpoints - Swagger integration for SI.Endpoints.</Description>
+    <Description>Simple ASP.NET Core API Endpoints - NSwag integration for SI.Endpoints.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/SiberaIndustries/SI.Endpoints</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller;Swashbuckle;Swagger;Annotations</PackageTags>
+    <PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller;NSwag;Swagger;Annotations</PackageTags>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.*" />
+    <PackageReference Include="NSwag.Generation.AspNetCore" Version="13.*" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,11 +1,12 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using NSwag.Generation.Processors;
+using NSwag.Generation.Processors.Contexts;
 using SI.Endpoints.Core;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Linq;
 using System.Reflection;
 
 namespace SI.Endpoints
 {
-    public class FeatureFilter : IOperationFilter
+    public class FeatureFilter : IOperationProcessor
     {
         private readonly bool replaceExistingTags = true;
 
@@ -18,21 +19,23 @@ namespace SI.Endpoints
             this.replaceExistingTags = replaceExistingTags;
         }
 
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        public bool Process(OperationProcessorContext context)
         {
             if (context.MethodInfo.DeclaringType.IsSubclassOf(typeof(EndpointBase)) &&
                 (context.MethodInfo.Name == "HandleAsync" || context.MethodInfo.Name == "Handle") &&
                 FeatureResolver.TryResolve(context.MethodInfo.DeclaringType.GetTypeInfo(), out string? feature))
             {
-                if (replaceExistingTags || operation.Tags == null)
+                if (replaceExistingTags || context.OperationDescription.Operation.Tags == null)
                 {
-                    operation.Tags = new[] { new OpenApiTag { Name = feature } };
+                    context.OperationDescription.Operation.Tags = new[] { feature }.ToList();
                 }
                 else
                 {
-                    operation.Tags.Add(new OpenApiTag { Name = feature });
+                    context.OperationDescription.Operation.Tags.Add(feature);
                 }
             }
+
+            return true;
         }
     }
 }

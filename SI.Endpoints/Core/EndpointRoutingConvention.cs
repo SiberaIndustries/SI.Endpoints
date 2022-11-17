@@ -44,7 +44,7 @@ namespace SI.Endpoints.Core
                 {
                     routeBuilder.Replace(EndpointBase.EndpointFeatureRouteToken, string.Empty);
                 }
-                else if (FeatureResolver.TryResolve(controller.ControllerType, out string feature))
+                else if (FeatureResolver.TryResolve(controller.ControllerType, out string? feature))
                 {
                     routeBuilder.Replace(EndpointBase.EndpointFeatureRouteToken, $"{feature}/");
                 }
