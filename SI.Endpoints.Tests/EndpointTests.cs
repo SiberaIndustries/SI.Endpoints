@@ -1,12 +1,12 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SI.Endpoints.Core;
 using SI.Endpoints.Sample;
 using SI.Endpoints.Sample.Endpoints.TodoItem;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace SI.Endpoints.Tests
@@ -14,8 +14,9 @@ namespace SI.Endpoints.Tests
     public class EndpointTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly WebApplicationFactory<Program> factory;
+        private readonly JsonSerializerOptions settings = new(JsonSerializerDefaults.Web);
 
-        public EndpointTests(WebApplicationFactory<Program> factory)
+    public EndpointTests(WebApplicationFactory<Program> factory)
         {
             this.factory = factory;
         }
@@ -47,7 +48,7 @@ namespace SI.Endpoints.Tests
             var response = await client.GetAsync(expectedUri + id);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            var responseContent = JsonConvert.DeserializeObject<GetTodoItemResponse>(content);
+            var responseContent = JsonSerializer.Deserialize<GetTodoItemResponse>(content, settings);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -81,12 +82,12 @@ namespace SI.Endpoints.Tests
             var response = await client.GetAsync("/swagger/v1/swagger.json");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            var responseContent = JsonConvert.DeserializeObject<JObject>(content);
+            var responseContent = JsonSerializer.Deserialize<JsonObject>(content, settings);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            responseContent.SelectToken("info.title").Should().NotBeNull();
-            responseContent.SelectToken("paths./TodoItem/Create.post.tags")?.ToObject<string[]>()
+            responseContent["info"]?["title"].Should().NotBeNull();
+            responseContent["paths"]?["/TodoItem/Create"]?["post"]?["tags"]?.AsArray()?.Select(x => x.ToString())
                 .Should().NotBeNull().And.BeEquivalentTo("TodoItem");
         }
 
@@ -103,13 +104,36 @@ namespace SI.Endpoints.Tests
             var response = await client.GetAsync("/swagger/v1/swagger.json");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            var responseContent = JsonConvert.DeserializeObject<JObject>(content);
+            var responseContent = JsonSerializer.Deserialize<JsonObject>(content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            responseContent.SelectToken("info.title").Should().NotBeNull();
-            responseContent.SelectToken("paths./TodoItem/Create.post.tags")?.ToObject<string[]>()
+            responseContent["info"]?["title"].Should().NotBeNull();
+            responseContent["paths"]?["/TodoItem/Create"]?["post"]?["tags"]?.AsArray()?.Select(x => x.ToString())
                 .Should().NotBeNull().And.BeEquivalentTo("TodoItem", "Create");
+        }
+
+        [Fact]
+        public async Task ListResponseShouldBeSuccessful()
+        {
+            // Arrange
+            using var client = factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync($"/TodoItem/List/", HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+            //var asd = await response.Content.ReadAsStringAsync();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var todos = JsonSerializer.DeserializeAsyncEnumerable<ListTodoItemResponse>(stream, settings);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var count = 0;
+            await foreach (var todo in todos)
+            {
+                todo.Id.Should().Be(++count);
+            }
         }
     }
 }
