@@ -36,11 +36,11 @@ namespace SI.Endpoints.Tests
         [InlineData(true, true, "", "/TodoItem/", "")]
         [InlineData(true, false, "API", "/API/TodoItem/Get/", "")]
         [InlineData(true, true, "API", "/API/TodoItem/", "")]
-        [InlineData(true, false, "", "/TodoItem/Get/", "nwsag")]
-        [InlineData(false, false, "", "/Get/", "nwsag")]
-        [InlineData(true, true, "", "/TodoItem/", "nwsag")]
-        [InlineData(true, false, "API", "/API/TodoItem/Get/", "nwsag")]
-        [InlineData(true, true, "API", "/API/TodoItem/", "nwsag")]
+        [InlineData(true, false, "", "/TodoItem/Get/", "nswag")]
+        [InlineData(false, false, "", "/Get/", "nswag")]
+        [InlineData(true, true, "", "/TodoItem/", "nswag")]
+        [InlineData(true, false, "API", "/API/TodoItem/Get/", "nswag")]
+        [InlineData(true, true, "API", "/API/TodoItem/", "nswag")]
         public async Task GetResponseShouldSuccessfulWhenIdExists(bool useFeatures, bool ignoreNames, string prefix, string expectedUri, string mode)
         {
             // Arrange
