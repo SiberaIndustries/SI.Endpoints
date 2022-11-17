@@ -7,7 +7,7 @@
 
 ## Introduction
 
-TODO
+Have fun using this lightweight endpoint API library. No more bloated `Program.cs` files and no more bloated Controllers. This library is in between those two.
 
 ## Getting Started
 
@@ -17,42 +17,27 @@ TODO
 Install-Package SI.Endpoints
 ```
 
-### 2. Edit your `ConfigureServices()` method in `Startup.cs`
+### 2. Register the Endpoints
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    // ..
-    services.AddControllers();
-    services.AddEndpointsRouting();
-    // ..
-}
+services.AddControllers();
+services.AddEndpointsRouting();
 ```
 
 ### 3. Create your first Endpoint and have fun
 
 ```cs
-// Models
-public class SayHelloRequest
-{
-    public string Name { get; set; }
-}
+// DTOs
+public record SayHelloRequest(string Name);
+public record SayHelloResponse(string Message);
 
-public class SayHelloResponse
-{
-    public string Message { get; set; }
-}
-
-// The Endpoint
+// Endpoint
 public class SayHello : Endpoint<SayHelloRequest, SayHelloResponse>
 {
-    [HttpGet]
+    [HttpPost]
     public override ActionResult<SayHelloResponse> Handle(SayHelloRequest request)
     {
-        return new SayHelloResponse
-        {
-            Message = "Welcome " + request.Name
-        };
+        return new SayHelloResponse("Hello " + request.Name);
     }
 }
 ```
@@ -62,17 +47,12 @@ Check out your first endpoint and navigate to: `<uri>/SayHello?Name=World!`
 ## Optionally Configure your endpoints
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
+services.AddControllers();
+services.AddEndpointsRouting(options =>
 {
-    // ..
-    services.AddControllers();
-    services.AddEndpointsRouting(options =>
-    {
-        options.UseFeatures();              // Groups endpoints by the same last namespace part
-        options.WithPrefix("Ultra-Api");    // Adds the given prefix name to all endpoint routes
-    });
-    // ..
-}
+    options.UseFeatures();              // Groups endpoints by the same last namespace part
+    options.WithPrefix("Ultra-Api");    // Adds the given prefix name to all endpoint routes
+});
 ```
 
 The following example shows how endpoints are configured with the given configuration:
@@ -86,30 +66,48 @@ MyApp.AnotherEndpointNamespace.Calculate.Subtract  // <uri>/Ultra-Api/Calculate/
 
 ## Use the Swagger integration
 
-If you use swagger, then you will see that every endpoint is grouped separetly. If you want to group them by feature (like a standard controller in mvc), then:
+If you use swagger, then you will see that every endpoint is grouped separetly. If you want to group them by feature (like a standard controller in mvc), then simply enable the feature filter.
 
-### 1. Install the NuGet-Package
+### A. Using Swashbuckle
+
+**1. Install the NuGet-Package**
 
 ```
 Install-Package SI.Endpoints.Swagger
 ```
 
-### 2. Add `EnableAnnotations()` and `EnableFeatureFilter()` to the Swagger configuration in `Startup.cs`
+**2. Add `EnableAnnotations()` and `EnableFeatureFilter()` to the Swagger configuration**
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddControllers();
-    services.AddEndpointsRouting(options => options.UseFeatures() });
+services.AddControllers();
+services.AddEndpointsRouting(options => options.UseFeatures() });
 
-    // Add swagger
-    services.AddSwaggerGen(options =>
-    {
-        options.EnableAnnotations();    // Make use of the Annotations
-        options.EnableFeatureFilter();  // Automatically group endpoints by the [feature] template
-        options.SwaggerDoc("v1", new OpenApiInfo { Title = "Sample endpoints", Version = "v1" });
-    });
-}
+// Add swagger
+services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();    // Make use of the Annotations
+    options.EnableFeatureFilter();  // Automatically group endpoints by the [feature] template
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Sample endpoints", Version = "v1" });
+});
+```
+
+### B. Using NSwag
+
+**1. Install the NuGet-Package**
+
+```
+Install-Package SI.Endpoints.NSwag
+```
+
+**2. Add `EnableAnnotations()` and `EnableFeatureFilter()` to the Swagger configuration**
+
+```cs
+services.AddControllers();
+services.AddEndpointsRouting(options => options.UseFeatures() });
+
+// Add swagger
+services.AddOpenApiDocument(options => options.EnableFeatureFilter()); // Option A
+services.AddSwaggerDocument(options => options.EnableFeatureFilter()); // Option B
 ```
 
 ## Open Source License Acknowledgements and Third-Party Copyrights
