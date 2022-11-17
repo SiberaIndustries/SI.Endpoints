@@ -1,7 +1,5 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using SI.Endpoints.Core;
 using SI.Endpoints.Sample;
 using SI.Endpoints.Sample.Endpoints.TodoItem;
 using System.Net;
@@ -16,33 +14,39 @@ namespace SI.Endpoints.Tests
         private readonly WebApplicationFactory<Program> factory;
         private readonly JsonSerializerOptions settings = new(JsonSerializerDefaults.Web);
 
-    public EndpointTests(WebApplicationFactory<Program> factory)
+        public EndpointTests(WebApplicationFactory<Program> factory)
         {
             this.factory = factory;
         }
 
+        private HttpClient CreateCustomClient(bool useFeatures = true, bool ignoreNames = false, bool replaceTags = true, string prefix = "", string mode = "")
+        {
+            return factory.WithWebHostBuilder(builder => builder
+                .UseSetting("mode", mode)
+                .UseSetting("useFeatures", useFeatures.ToString())
+                .UseSetting("ignoreNames", ignoreNames.ToString())
+                .UseSetting("replaceTags", replaceTags.ToString())
+                .UseSetting("prefix", prefix))
+                .CreateClient();
+        }
+
         [Theory]
-        [InlineData(true, false, "", "/TodoItem/Get/")]
-        [InlineData(false, false, "", "/Get/")]
-        [InlineData(true, true, "", "/TodoItem/")]
-        [InlineData(true, false, "API", "/API/TodoItem/Get/")]
-        [InlineData(true, true, "API", "/API/TodoItem/")]
-        public async Task GetResponseShouldSuccessfulWhenIdExists(bool useFeatures, bool ignoreEndpointNames, string prefix, string expectedUri)
+        [InlineData(true, false, "", "/TodoItem/Get/", "")]
+        [InlineData(false, false, "", "/Get/", "")]
+        [InlineData(true, true, "", "/TodoItem/", "")]
+        [InlineData(true, false, "API", "/API/TodoItem/Get/", "")]
+        [InlineData(true, true, "API", "/API/TodoItem/", "")]
+        [InlineData(true, false, "", "/TodoItem/Get/", "nwsag")]
+        [InlineData(false, false, "", "/Get/", "nwsag")]
+        [InlineData(true, true, "", "/TodoItem/", "nwsag")]
+        [InlineData(true, false, "API", "/API/TodoItem/Get/", "nwsag")]
+        [InlineData(true, true, "API", "/API/TodoItem/", "nwsag")]
+        public async Task GetResponseShouldSuccessfulWhenIdExists(bool useFeatures, bool ignoreNames, string prefix, string expectedUri, string mode)
         {
             // Arrange
             var id = 42;
-            using var client = factory.WithWebHostBuilder(builder => builder.ConfigureServices(services =>
-            {
-                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(EndpointRoutingConvention));
-                services.Remove(descriptor);
-
-                services.AddEndpointsRouting(x =>
-                {
-                    x.UseFeatures(useFeatures);
-                    x.IgnoreEndpointNames(ignoreEndpointNames);
-                    x.WithPrefix(prefix);
-                });
-            })).CreateClient();
+            using var client = CreateCustomClient(useFeatures, ignoreNames, false, prefix, mode);
+           
 
             // Act
             var response = await client.GetAsync(expectedUri + id);
@@ -60,7 +64,7 @@ namespace SI.Endpoints.Tests
         {
             // Arrange
             var id = 43;
-            using var client = factory.CreateClient();
+            using var client = CreateCustomClient();
 
             // Act
             var response = await client.GetAsync($"/TodoItem/Get/" + id);
@@ -73,10 +77,7 @@ namespace SI.Endpoints.Tests
         public async Task GetSwaggerDocWithFeatureFilterEnabled()
         {
             // Arrange
-            using var client = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((context, config) =>
-            {
-                config.AddCommandLine(new[] { "FeatureFilter=true" });
-            })).CreateClient();
+            using var client = CreateCustomClient(replaceTags: true);
 
             // Act
             var response = await client.GetAsync("/swagger/v1/swagger.json");
@@ -95,10 +96,7 @@ namespace SI.Endpoints.Tests
         public async Task GetSwaggerDocWithFeatureFilterDisabled()
         {
             // Arrange
-            using var client = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((context, config) =>
-            {
-                config.AddCommandLine(new[] { "FeatureFilter=false" });
-            })).CreateClient();
+            using var client = CreateCustomClient(replaceTags: false);
 
             // Act
             var response = await client.GetAsync("/swagger/v1/swagger.json");
@@ -117,13 +115,11 @@ namespace SI.Endpoints.Tests
         public async Task ListResponseShouldBeSuccessful()
         {
             // Arrange
-            using var client = factory.CreateClient();
+            using var client = CreateCustomClient();
 
             // Act
             var response = await client.GetAsync($"/TodoItem/List/", HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
-            //var asd = await response.Content.ReadAsStringAsync();
-
             var stream = await response.Content.ReadAsStreamAsync();
             var todos = JsonSerializer.DeserializeAsyncEnumerable<ListTodoItemResponse>(stream, settings);
 

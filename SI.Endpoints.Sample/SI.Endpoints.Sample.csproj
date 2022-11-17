@@ -9,11 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.3.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.*" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SI.Endpoints.NSwag\SI.Endpoints.NSwag.csproj" />
     <ProjectReference Include="..\SI.Endpoints.Swagger\SI.Endpoints.Swagger.csproj" />
   </ItemGroup>
 
