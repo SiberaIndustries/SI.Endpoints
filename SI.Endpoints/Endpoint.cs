@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SI.Endpoints.Core;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SI.Endpoints
@@ -43,4 +44,16 @@ namespace SI.Endpoints
     {
         public abstract Task<ActionResult> HandleAsync(TRequest request);
     }
+
+#if NETSTANDARD2_1_OR_GREATER
+    public abstract class AsyncEnumerableEndpoint<TRequest, TResponse> : EndpointBase
+    {
+        public abstract ActionResult<IAsyncEnumerable<TResponse>> HandleAsync(TRequest request);
+    }
+
+    public abstract class AsyncEnumerableEndpointWithResponse<TResponse> : EndpointBase
+    {
+        public abstract ActionResult<IAsyncEnumerable<TResponse>> HandleAsync();
+    }
+#endif
 }
