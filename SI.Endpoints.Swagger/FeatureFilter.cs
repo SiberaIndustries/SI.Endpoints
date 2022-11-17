@@ -22,7 +22,7 @@ namespace SI.Endpoints
         {
             if (context.MethodInfo.DeclaringType.IsSubclassOf(typeof(EndpointBase)) &&
                 (context.MethodInfo.Name == "HandleAsync" || context.MethodInfo.Name == "Handle") &&
-                FeatureResolver.TryResolve(context.MethodInfo.DeclaringType.GetTypeInfo(), out string feature))
+                FeatureResolver.TryResolve(context.MethodInfo.DeclaringType.GetTypeInfo(), out string? feature))
             {
                 if (replaceExistingTags || operation.Tags == null)
                 {
