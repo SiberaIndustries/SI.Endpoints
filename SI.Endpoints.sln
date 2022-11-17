@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30517.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SI.Endpoints", "SI.Endpoints\SI.Endpoints.csproj", "{100AD472-19A4-4170-B3C2-6A8229D20D33}"
 EndProject
@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SI.Endpoints.Sample", "SI.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SI.Endpoints.Tests", "SI.Endpoints.Tests\SI.Endpoints.Tests.csproj", "{EABB4DC4-8734-46A0-A53F-610A1E9C3C4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SI.Endpoints.Swagger", "SI.Endpoints.Swagger\SI.Endpoints.Swagger.csproj", "{23D559A1-090E-4D2C-B15E-E1E475F20810}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SI.Endpoints.Swagger", "SI.Endpoints.Swagger\SI.Endpoints.Swagger.csproj", "{23D559A1-090E-4D2C-B15E-E1E475F20810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SI.Endpoints.NSwag", "SI.Endpoints.NSwag\SI.Endpoints.NSwag.csproj", "{A0FF39E8-64C2-431E-A98D-AD33CAE25DAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{23D559A1-090E-4D2C-B15E-E1E475F20810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23D559A1-090E-4D2C-B15E-E1E475F20810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23D559A1-090E-4D2C-B15E-E1E475F20810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0FF39E8-64C2-431E-A98D-AD33CAE25DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0FF39E8-64C2-431E-A98D-AD33CAE25DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0FF39E8-64C2-431E-A98D-AD33CAE25DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0FF39E8-64C2-431E-A98D-AD33CAE25DAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
