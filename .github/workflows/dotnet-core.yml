@@ -18,7 +18,7 @@ jobs:
         id: cache-dotnet-tools
         uses: actions/cache@v3
         with:
-          path: ./.tools
+          path: ~/.dotnet/tools
           key: ${{ runner.os }}-dotnet-tools
       
       - name: Install dotnet tools
@@ -29,13 +29,12 @@ jobs:
           NUGET_XMLDOC_MODE: skip
         shell: pwsh
         run: |
-          New-Item -Path ./.tools -ItemType Directory -Force
-          dotnet tool update dotnet-sonarscanner --tool-path ./.tools
+          dotnet tool update --global dotnet-sonarscanner
       
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
-          path: ~/sonar/cache
+          path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
       
 #      - name: Cache NuGet-Packages
@@ -72,9 +71,9 @@ jobs:
           $file = "SI.Endpoints\bin\Release\netstandard2.0\SI.Endpoints.dll"
           $version = (Get-Command ([System.IO.Path]::Combine($pwd.Path, $file))).Version.ToString(3)
           
-          ./.tools/dotnet-sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin /k:"SiberaIndustries_SI.Endpoints" /o:"siberaindustries" /d:sonar.host.url="https://sonarcloud.io" /v:"$version" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet test -c release --no-restore --nologo /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-          ./.tools/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Create NuGet package
         env:
