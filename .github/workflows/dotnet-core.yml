@@ -37,12 +37,14 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
       
-#      - name: Cache NuGet-Packages
-#        id: cache-nuget-packages
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.nuget/packages
-#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+      - name: Cache NuGet-Packages
+        id: cache-nuget-packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
 #      - name: Restore Packages
 #        if: steps.cache-nuget-packages.outputs.cache-hit != 'true'
