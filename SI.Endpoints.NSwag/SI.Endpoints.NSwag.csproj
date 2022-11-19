@@ -1,48 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Common">
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+	<LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
+	<Version>1.0.0</Version>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   
   <PropertyGroup Label="Package">
-    <PackageId>SI.Endpoints.NSwag</PackageId>
-    <Authors>Tobias Sibera</Authors>
-    <Company>Sibera Industries</Company>
-    <Description>Simple ASP.NET Core API Endpoints - NSwag integration for SI.Endpoints.</Description>
-    <PackageIcon>icon.png</PackageIcon>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/SiberaIndustries/SI.Endpoints</RepositoryUrl>
-    <PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
-    <PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller;NSwag;Swagger;Annotations</PackageTags>
+	<PackageId>SI.Endpoints.NSwag</PackageId>
+	<Authors>Tobias Sibera</Authors>
+	<Company>Sibera Industries</Company>
+	<Description>Simple ASP.NET Core API Endpoints - NSwag integration for SI.Endpoints.</Description>
+	<PackageIcon>icon.png</PackageIcon>
+	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/SiberaIndustries/SI.Endpoints</RepositoryUrl>
+	<PackageReleaseNotes>https://github.com/SiberaIndustries/SI.Endpoints/releases</PackageReleaseNotes>
+	<PackageProjectUrl>https://github.com/SiberaIndustries/SI.Endpoints</PackageProjectUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageTags>AspNet;ASP.Net;AspNetCore;Core;API;Web;Rest;Communication;Endpoints;MVC;Controller;NSwag;Swagger;Annotations</PackageTags>
 
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup Label="Code Analysis">
-    <Features>IOperation</Features>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\code-analysis.ruleset</CodeAnalysisRuleSet>
+	<Features>IOperation</Features>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<CodeAnalysisRuleSet>..\code-analysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NSwag.Generation.AspNetCore" Version="13.*" />
+	<PackageReference Include="NSwag.Generation.AspNetCore" Version="13.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SI.Endpoints\SI.Endpoints.csproj" />
+	<ProjectReference Include="..\SI.Endpoints\SI.Endpoints.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\icon.png" Link="icon.png" Visible="false" Pack="true" PackagePath="" />
+	<None Include="..\icon.png" Link="icon.png" Visible="false" Pack="true" PackagePath="" />
+	<None Include="..\README.md" Visible="false" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
