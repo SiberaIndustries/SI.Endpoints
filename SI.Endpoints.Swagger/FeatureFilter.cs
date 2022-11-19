@@ -9,11 +9,7 @@ namespace SI.Endpoints
     {
         private readonly bool replaceExistingTags = true;
 
-        public FeatureFilter()
-        {
-        }
-
-        public FeatureFilter(bool replaceExistingTags)
+        public FeatureFilter(bool replaceExistingTags = true)
         {
             this.replaceExistingTags = replaceExistingTags;
         }
