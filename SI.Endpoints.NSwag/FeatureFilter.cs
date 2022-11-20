@@ -7,7 +7,7 @@ namespace SI.Endpoints
 {
     public class FeatureFilter : IOperationProcessor
     {
-        private readonly bool replaceExistingTags = true;
+        private readonly bool replaceExistingTags;
 
         public FeatureFilter(bool replaceExistingTags = true)
         {
