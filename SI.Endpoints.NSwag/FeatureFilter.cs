@@ -1,7 +1,6 @@
 ﻿using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
 using SI.Endpoints.Core;
-using System.Linq;
 using System.Reflection;
 
 namespace SI.Endpoints
@@ -17,7 +16,7 @@ namespace SI.Endpoints
 
         public bool Process(OperationProcessorContext context)
         {
-            if (context.MethodInfo.DeclaringType.IsSubclassOf(typeof(EndpointBase)) &&
+            if (context.MethodInfo.DeclaringType!.IsSubclassOf(typeof(EndpointBase)) &&
                 (context.MethodInfo.Name == "HandleAsync" || context.MethodInfo.Name == "Handle") &&
                 FeatureResolver.TryResolve(context.MethodInfo.DeclaringType.GetTypeInfo(), out string? feature))
             {

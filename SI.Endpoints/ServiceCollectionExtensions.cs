@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SI.Endpoints.Core;
-using System;
 
 namespace SI.Endpoints
 {

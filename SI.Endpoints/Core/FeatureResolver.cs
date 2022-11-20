@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace SI.Endpoints.Core
 {
@@ -7,7 +6,7 @@ namespace SI.Endpoints.Core
     {
         public static bool TryResolve(TypeInfo value, out string? feature)
         {
-            feature = value.Namespace.Split('.').LastOrDefault();
+            feature = value.Namespace?.Split('.').LastOrDefault();
             return feature != null;
         }
     }

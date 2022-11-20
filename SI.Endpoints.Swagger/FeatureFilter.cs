@@ -16,7 +16,7 @@ namespace SI.Endpoints
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (context.MethodInfo.DeclaringType.IsSubclassOf(typeof(EndpointBase)) &&
+            if (context.MethodInfo.DeclaringType!.IsSubclassOf(typeof(EndpointBase)) &&
                 (context.MethodInfo.Name == "HandleAsync" || context.MethodInfo.Name == "Handle") &&
                 FeatureResolver.TryResolve(context.MethodInfo.DeclaringType.GetTypeInfo(), out string? feature))
             {
