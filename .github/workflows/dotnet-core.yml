@@ -74,7 +74,7 @@ jobs:
         run: dotnet pack -o . -c release --no-restore --no-build
 
       - name: Upload NuGet-Package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: NuGet-Packages
           path: ./*.nupkg
