@@ -6,8 +6,8 @@
 	<LangVersion>latest</LangVersion>
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>enable</ImplicitUsings>
-	<Version>1.1.0</Version>
-	<AssemblyVersion>1.1.0.0</AssemblyVersion>
+	<Version>1.2.0</Version>
+	<AssemblyVersion>1.2.0.0</AssemblyVersion>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   
