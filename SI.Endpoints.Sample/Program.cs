@@ -8,11 +8,11 @@ namespace SI.Endpoints.Sample
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var mode = builder.Configuration.GetValue("mode", "swashbuckle").ToUpper();
+            var mode = builder.Configuration.GetValue("mode", "swashbuckle")!.ToUpper();
             var useFeatures = builder.Configuration.GetValue("useFeatures", true);
             var ignoreNames = builder.Configuration.GetValue("ignoreNames", true);
             var replaceTags = builder.Configuration.GetValue("replaceTags", true);
-            var prefix = builder.Configuration.GetValue("prefix", "");
+            var prefix = builder.Configuration.GetValue("prefix", "")!;
 
             // Add services to the container
             builder.Services.AddControllers();
